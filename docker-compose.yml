@@ -1,0 +1,17 @@
+
+services:
+  load-balancer:
+    build: .
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - NODE_ENV=production
+    networks:
+      - mon_reseau
+    restart: unless-stopped
+
+networks:
+  mon_reseau:
+    external : true

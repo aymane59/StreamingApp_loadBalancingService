@@ -3,7 +3,7 @@ const prometheusService = require('../services/prometheusService');
 const config = require('../config/config');
 const fs = require('fs');
 
-const mqttUrl = 'mqtt://172.20.10.9:1883'; // L'URL de votre broker MQTT
+const mqttUrl = config.mqttUrl; // L'URL de votre broker MQTT
 
 
 // Configurer le client MQTT
@@ -47,14 +47,15 @@ const loadBalanceChunk = async (chunkData) => {
 
         const selectedNode = chooseFogNode(metrics);
         const topic = `${selectedNode.topic}`;
-        logMessage(`Chunk redirigé vers ${topic}`);
+        const chunkNumber = chunkData.chunkNumber;
+        logMessage(`Debut de la redirection du Chunk ${chunkNumber} vers ${topic}`);
         
         // Publier les données sur le topic du nœud sélectionné
         mqttClient.publish(topic, JSON.stringify(chunkData), { qos: 1 }, (error) => {
             if (error) {
-                console.error(`Erreur lors de la redirection du chunk à ${topic}:`, error);
+                console.error(`Erreur lors de la redirection du chunk ${chunkNumber} à ${topic}:`, error);
             } else {
-                console.log(`Chunk redirigé avec succès à ${topic}`);
+                console.log(`Chunk ${chunkNumber} redirigé avec succès à ${topic}`);
             }
         });
     } catch (error) {

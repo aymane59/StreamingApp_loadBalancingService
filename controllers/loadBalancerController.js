@@ -1,7 +1,9 @@
 const mqtt = require('mqtt');
 const loadBalancerService = require('../services/loadBalancerService');
+const config = require('../config/config');
 
-const mqttUrl = 'mqtt://172.20.10.9:1883'; // L'URL de votre broker MQTT
+
+const mqttUrl = config.mqttUrl; // L'URL de votre broker MQTT
 const mqttChannel = 'streamer/encodedChunks'; // Le topic sur lequel écouter
 
 const startListening = () => {
